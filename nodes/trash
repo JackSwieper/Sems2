@@ -1,0 +1,29 @@
+if (self.function == 0):                                                #Sinus wave
+            offset = (self.setpoint_z[0] + self.setpoint_z[1]) / 2                       
+            amplitude = self.setpoint_z[0] - offset
+            setpoint = amplitude * math.sin(i/(self.duration * 2) * 2 * math.pi) + offset
+        
+        elif (self.function == 1):                                              #Triangular wave
+            if i > (self.duration):                                            
+                setpoint = self.setpoint_z[0] - (2 - i/(self.duration)) * (self.setpoint_z[0] - self.setpoint_z[1])
+            else:
+                setpoint = self.setpoint_z[1] + (1 - i/self.duration) * (self.setpoint_z[0] - self.setpoint_z[1])
+        
+        elif (self.function == 2):                                              #Square wave
+            if i > (self.duration):                                           
+                setpoint = self.setpoint_z[0]
+            else:
+                setpoint = self.setpoint_z[1]
+    
+        elif (self.function == 3):                                              #Sawtooth wave
+            setpoint = self.setpoint_z[1] - (i/(2*self.duration) -1) * (self.setpoint_z[0] - self.setpoint_z[1]) 
+        
+        elif (self.function == 4):                                              #Static
+            setpoint = (self.setpoint_z[0] + self.setpoint_z[1]) / 2   
+        
+        else:                                                                   #Invalid Input
+            self.get_logger().info(
+            "Invalid input, no according function found. Aborting.",
+            throttle_duration_sec=1)
+            return -0.1 
+        return setpoint
